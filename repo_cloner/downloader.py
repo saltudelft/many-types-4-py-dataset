@@ -5,16 +5,23 @@ from urllib.error import HTTPError
 import subprocess
 import logging
 import json
+import time
 
 from repo_cloner.project import Project, GitProject
 
 
-def is_repo_accessible(url: str) -> bool:
-    try:
-        urlopen(url)
-        return True
-    except HTTPError:
-        return False
+def is_repo_accessible(url: str, cooldown: int=5) -> bool:
+    
+    while True:
+        try:
+            urlopen(url)
+            return True
+        except HTTPError as e:
+            # Too many requests
+            if e.code == 429:
+                time.sleep(cooldown)
+                continue
+            return False
 
 
 def download_git_project(project, output_dir, full_fetch=False):
@@ -29,7 +36,7 @@ def download_project(project: GitProject, output_base_dir, full_fetch=False):
     try:
         output_dir = path.join(output_base_dir, project.full_name)
         if path.isdir(output_dir):
-            logging.info("%s already exists", project.full_name)
+            print("%s already exists", project.full_name)
             return False
         if is_repo_accessible(project.clone_url):
             download_git_project(project, output_dir, full_fetch=full_fetch)
