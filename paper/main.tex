@@ -2,6 +2,7 @@
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 \usepackage{cite}
+\usepackage{booktabs}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
@@ -46,6 +47,15 @@ g.gousios@tudelft.nl}
 \end{IEEEkeywords}
 
 \section{Introduction}
+Dynamic programming languages (DPLs) give developers fast prototyping as they do not require static types at compile-time. However, lack of static typing causes several issues such as unexpected run-time exceptions, sub-optimal support for integrated development environments (IDEs), and less precise program analysis. To address these issues, optional static typing is introduced for DPLs like Python \cite{van2014pep}, JavaScript \cite{bierman2014understanding}, PHP \cite{klingstrom2020type}. Yet, developers are required to manaually add type annotations to their existing codebases, which is a labarious task \cite{ore2018assessing}.
+
+In recent years, machine learning (ML) techniques has been successfully applied to tackle problems in sofware engineering (SE) \cite{allamanis2018survey}, including but not limited to, type inference \cite{allamanis2020typilus, pradel2019typewriter}, code completion \cite{svyatkovskiy2019pythia}, code changes \cite{tufano2019learning}, and bug detection \cite{qiao2020deep}. This research area is often called \textit{ML4SE}, which is new and emerging.
+
+ML techniques need a large and high-quality dataset to achieve a satisfactory level of generalization for the task at hand \cite{sun2017revisiting}. In the ML community, there are quite a number of well-known visual and text datasets \cite{pouyanfar2018survey}. For the SE problems, several research efforts have been made to create datasets to facilitate further research with data-driven models. For instance, Karampatsis et al. \cite{karampatsis2020often} recently published the ManySStuBs4J dataset for repairing simple bugs in Java programs. 
+
+Concerning the ML-based type inferece for DPLs, it is difficult to create a benchmark dataset that contains a sufficient number of software projects with type annotations. Because of the optional static typing, many software projects written in DPLs lack type annotations. Nevertheless, to train an ML-based type inference model, researchers ended up creating their own dataset by either gathering a small set of projects with type annotations \cite{pradel2019typewriter} or employ static type inference tools to add type annotations to existing projects \cite{allamanis2020typilus}, which makes the learning task weak.
+
+
 
 \begin{figure*}[!t]
 	\centering
@@ -69,19 +79,43 @@ We created ManyType4Py dataset using the following methodology:
 
 \section{Description}
 
+\begin{table*}[t]
+	\centering
+	\begin{tabular}{c l}
+		\toprule
+		Field Name in the JSON & Description \\
+		\midrule
+		\multicolumn{2}{c}{Project}  \\
+		\midrule
+		\texttt{author/repo} & The name of a project and its author on the GitHub URL  \\
+		\midrule
+		\texttt{src\_files} & Contains the path of a project's source code files \\
+		\midrule
+		\texttt{file\_path} & The path of a source code file to differentiate it with other files \\
+		\midrule
+		\multicolumn{2}{c}{Module}  \\
+		\midrule
+		\texttt{untyped\_seq} & The normalized seq2seq representation of a source code file while identifiers replaced by their types \\
+		\midrule
+		
+		\bottomrule
+	\end{tabular}
+\end{table*}
+
 \section{Applications}
+% Type inference 
+
+% Code compeletion
 
 \section{Benchmark}
 
 \section{Related Work}
-There are a number of Python code copora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} accompanies with a relatively small dataset which contains 600 Python projects. Moreover, the source code files of Typilus' dataset is converted to graph representations that is onlu suitable for training the Typilus model. However, the ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models.
+There are several Python code corpora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed the Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} accompanies with a relatively small dataset that contains 600 Python projects. Moreover, the source code files of Typilus' dataset are converted to graph representations that are only suitable for training the Typilus model. However, the ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models. Raychev et al. \cite{raychev2016probabilistic} published the Python-150K dataset in 2016, which contains 8,422 Python projects. Unlike our dataset, the Python-150K dataset \cite{raychev2016probabilistic} is not collected for the ML-based type inference task, meaning that a large of number projects in the dataset may not have type annotations at all. Moreover, Allamanis \cite{allamanis2019adverse} showed that the Python-150K suffers from duplication despite the removal of project forks.
 
 
 \section{Conclusion}
 
 \section*{Acknowledgment}
-
-\section*{References}
 
 \bibliographystyle{IEEEtran}
 \bibliography{main}
