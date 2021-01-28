@@ -7,6 +7,7 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{threeparttable}
+\usepackage[multiple]{footmisc}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -72,7 +73,7 @@ In summary, the paper has the following contributions:
 	\label{fig:overview-pipeline-sa}
 \end{figure*}
 
-\section{Methodology}
+\section{Methodology}\label{sec:method}
 We created the ManyType4Py dataset using the following methodology:
 
 \begin{itemize}
@@ -103,7 +104,51 @@ After completing all the aforementioned steps, a zip file is created which conta
 \end{table}
 
 \section{Description}
-Before describing the charactersitics of the ManyTypes4Py dataset, we first describe the duplication statistics across the dataset, which is shown in Table \ref{tab:dup-stats}.
+Before describing the characteristics of the ManyTypes4Py dataset, we first describe the duplication statistics across the dataset, which is shown in Table \ref{tab:dup-stats}. The duplication of the dataset is 69.45\% as detected by the CD4Py tool. However, this is in line with the findings of Lopes et al. \cite{lopes2017dejavu}, which showed that the Python ecosystem on GitHub has 71\% file-level duplicates. It should be noted that the duplication ratio is obtained using the following formula:
+\begin{equation}
+\frac{(\text{no. of duplicate files} -\text{ no. of detected clusters})}{\text{no. of source code files} * 100.0}
+\end{equation}
+After keeping a file from each duplicate cluster, we removed 354,409 duplicate files from the dataset.
+
+The characteristics of the ManyTypes4Py are shown in Table \ref{tab:char-dataset} after code de-duplication. Overall, the dataset has 5,382 Python projects and 183,916 source code files (i.e. \texttt{.py} files). 27.6\% of source code files have type annotations, i.e., there is at least one type-annotated function in those files. Of 2,096,797 functions in the dataset, 53.8\% has comments\footnote{Note that here comments are functions' docstring in Python, which can be a one-line description or a complete description of a function.}\footnote{Our LibSA4Py tool can detect Google, reST, and NumPy docstrings.} and 15.5\% has return type annotations. However, Of 3,923,667 functions' arguments, 5.6\% have comments and 12.2\% have type annotations.
+
+As shown in Table \ref{tab:char-dataset}, there are a total of 869,825 type annotations and 67,060 unqiue types in the ManyTypes4Py dataset. To demonstrate the distribution of types, top 10 most frequent types in the dataset are shown in Figure \ref{fig:top-10-types}. Of 869,825 types, 50.56\% of them are present in the top 10 most frequent types. As can be observed from Figure \ref{fig:top-10-types}, types follow a long-tail distribution. In other words, the majority of type annotations are either \texttt{str}, \texttt{None}, \texttt{int}, or \texttt{bool}.
+
+\begin{table}[!t]
+	\centering
+	\label{tab:char-dataset}
+	\caption{Characteristics of the ManyTypes4Py Dataset}
+	\begin{threeparttable}
+		\begin{tabular}{l c}
+			\toprule
+			Metrics & Value \\
+			\midrule
+			Repositories & 5,382 \\
+			Lines of code\tnote{a} & 22M \\
+			\midrule
+			Files & 183,916 \\
+			...with type annotations & 50,838 (27.6\%) \\
+			\midrule
+			Functions & 2,096,797 \\
+			...with comment & 1,129,573 (53.8\%) \\
+			...with return type annotations & 325,532 (15.5\%)  \\
+			\midrule
+			Arguments & 3,923,667 \\
+			...with comment & 220,976 (5.6\%) \\ 
+			...with type annotations & 480,793 (12.2\%) \\
+			\midrule
+			Types & 869,825 \\
+			...unique & 67,060 \\
+			\bottomrule
+		\end{tabular}
+		\begin{tablenotes}
+			\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
+		\end{tablenotes}
+	\end{threeparttable}
+\end{table}
+
+As stated in Section \ref{sec:method}, the dataset provides processed Pythons in JSON-formatted files, which contains various type hints and features. As of this writing, there are 23 fields in JSON-formatted files that are described in Table \ref{tab:json-fields}. Of 23 extracted fields, 16 of them are natural/contextual type hints or features that can be used for training ML-based type inference models. For instance, the \texttt{name} field stores the name of a class or a function, which is a natural source of information for predicting types \cite{malik2019nl2type}. The \texttt{ret\_exprs} and \texttt{params\_occur} fields provide return expression(s) of a function and usages of functions' parameter(s) in its body, respectively. These are considered contextual type hints and the context in which a variable or an argument is used provides a hint for predicting types \cite{pradel2019typewriter}. Lastly, the \texttt{untyped\_seq} and \texttt{typed\_seq} fields provide the normalized seq2seq representation of a Python source code file and the type of identifiers in the file, respectively. They both can directly be used for training an ML-based type inference model.
+
 
 \begin{table*}[t]
 	\centering
@@ -170,35 +215,7 @@ Before describing the charactersitics of the ManyTypes4Py dataset, we first desc
 	\end{tabular}
 \end{table*}
 
-\begin{table}
-	\centering
-	\caption{Characteristics of the ManyTypes4Py Dataset}
-	\begin{threeparttable}
-		\begin{tabular}{l c}
-			\toprule
-			Metrics & Value \\
-			\midrule
-			Repositories & 5,382 \\
-			Files & 183,916 \\
-			Lines of code\tnote{a} & 22M \\
-			\midrule
-			Functions & 2,096,797 \\
-			...with comment & 1,129,573 (53.8\%) \\
-			...with return type annotations & 325,532 (15.5\%)  \\
-			\midrule
-			Arguments & 3,923,667 \\
-			...with comment & 220,976 (5.6\%) \\ 
-			...with type annotations & 480,793 (12.2\%) \\
-			\midrule
-			Types & 869,825 \\
-			...unique & 67,060 \\
-			\bottomrule
-		\end{tabular}
-		\begin{tablenotes}
-			\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
-		\end{tablenotes}
-	\end{threeparttable}
-\end{table}
+
 
 
 \begin{figure}
@@ -209,14 +226,17 @@ Before describing the charactersitics of the ManyTypes4Py dataset, we first desc
 \end{figure}
 
 \section{Applications}
+The ManyTypes4Py dataset has two applications, i.e., ML-based type inference and code completion, which are briefly described below.
 % Type inference 
+\paragraph{\textbf{ML-based type inference}} In this task, ML models are trained to predict the type of functions' arguments, return types, and variables for DPLs (e.g. Python). To do so, the AST of source code files are analyzed to extract features that give a hint for predicting types. By processing ASTs, The dataset provides common features, i.e., natural and contextual type hints that can be employed to create code embeddings and train an ML model. Moreover, the provided seq2seq representation of source code files give the full context around identifiers.
 
 % Code compeletion
+\paragraph{\textbf{Learning-based code completion}}
 
-\section{Benchmark}
+\section{Challenges}
 
 \section{Related Work}
-There are several Python code corpora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed the Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} accompanies with a relatively small dataset that contains 600 Python projects. Moreover, the source code files of Typilus' dataset are converted to graph representations that are only suitable for training the Typilus model. However, the ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models. Raychev et al. \cite{raychev2016probabilistic} published the Python-150K dataset in 2016, which contains 8,422 Python projects. Unlike our dataset, the Python-150K dataset \cite{raychev2016probabilistic} is not collected for the ML-based type inference task, meaning that a large of number projects in the dataset may not have type annotations at all. Moreover, Allamanis \cite{allamanis2019adverse} showed that the Python-150K suffers from duplication despite the removal of project forks.
+There are several Python code corpora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed the Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} accompanies with a relatively small dataset that contains 600 Python projects. Moreover, the source code files of Typilus' dataset are converted to graph representations that are only suitable for training the Typilus model. However, the ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models. Raychev et al. \cite{raychev2016probabilistic} published the Python-150K dataset in 2016, which contains 8,422 Python projects. Unlike our dataset, the Python-150K dataset \cite{raychev2016probabilistic} is not collected for the ML-based type inference task, meaning that a large of number projects in the dataset may not have type annotations at all. Moreover, Allamanis \cite{allamanis2019adverse} showed that the Python-150K dataset suffers from duplication despite the removal of project forks.
 
 
 \section{Conclusion}
