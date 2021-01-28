@@ -48,14 +48,21 @@ g.gousios@tudelft.nl}
 \end{IEEEkeywords}
 
 \section{Introduction}
-Dynamic programming languages (DPLs) give developers fast prototyping as they do not require static types at compile-time. However, lack of static typing causes several issues such as unexpected run-time exceptions, sub-optimal support for integrated development environments (IDEs), and less precise program analysis. To address these issues, optional static typing is introduced for DPLs like Python \cite{van2014pep}, JavaScript \cite{bierman2014understanding}, PHP \cite{klingstrom2020type}. Yet, developers are required to manaually add type annotations to their existing codebases, which is a labarious task \cite{ore2018assessing}.
+Dynamic programming languages (DPLs) give developers fast prototyping as they do not require static types at compile-time. However, lack of static typing causes several issues such as unexpected run-time exceptions, sub-optimal support for integrated development environments (IDEs), and less precise program analysis. To address these issues, optional static typing is introduced for DPLs like Python \cite{van2014pep}, JavaScript \cite{bierman2014understanding}, PHP \cite{klingstrom2020type}. Yet, developers are required to manually add type annotations to their existing codebases, which is a laborious task \cite{ore2018assessing}.
 
 In recent years, machine learning (ML) techniques has been successfully applied to tackle problems in sofware engineering (SE) \cite{allamanis2018survey}, including but not limited to, type inference \cite{allamanis2020typilus, pradel2019typewriter}, code completion \cite{svyatkovskiy2019pythia}, code changes \cite{tufano2019learning}, and bug detection \cite{qiao2020deep}. This research area is often called \textit{ML4SE}, which is new and emerging.
 
-ML techniques need a large and high-quality dataset to achieve an acceptable level of generalization for the task at hand \cite{sun2017revisiting}. In the ML community, there are quite a number of well-known visual and text datasets \cite{pouyanfar2018survey}. For the SE problems, several research efforts have been made to create datasets to facilitate further research with data-driven models. For instance, Karampatsis et al. \cite{karampatsis2020often} recently published the ManySStuBs4J dataset for repairing simple bugs in Java programs. 
+ML techniques need a large and high-quality dataset to achieve an acceptable level of generalization for the task at hand \cite{sun2017revisiting}. In the ML community, there are quite a number of well-known visual and text datasets \cite{pouyanfar2018survey}. For the SE problems, several research efforts have been made to create datasets to facilitate further research with data-driven models \cite{githubCorpus2013}. For instance, Karampatsis et al. \cite{karampatsis2020often} recently published the ManySStuBs4J dataset for repairing simple bugs in Java programs. 
 
-Concerning the ML-based type inferece for DPLs, it is difficult to create a benchmark dataset that contains a sufficient number of software projects with type annotations. Because of the optional static typing, many software projects written in DPLs lack type annotations. Nevertheless, to train an ML-based type inference model, researchers ended up creating their own dataset by either gathering a small set of projects with type annotations \cite{pradel2019typewriter} or employ static type inference tools to add type annotations to existing projects \cite{allamanis2020typilus}, which makes the learning task weak.
+Concerning the ML-based type inference for DPLs, it is difficult to create a benchmark dataset that contains a sufficient number of software projects with type annotations. Because of the optional static typing, many software projects written in DPLs lack type annotations. Nevertheless, to train an ML-based type inference model, researchers ended up creating their own dataset by either gathering a small set of projects with type annotations \cite{pradel2019typewriter} or employ static type inference tools to add type annotations to existing projects \cite{allamanis2020typilus}, which makes the learning task weak.
 
+As discussed above, we believe that there is a need for a large benchmark dataset that facilitates training ML-based type inference models, especially for Python. Unlike TypeScript's compiler, the Python interpreter cannot infer the type of variables or functions' signature. Motivated by this, this paper presents the ManyTypes4Py dataset, a large dataset to train ML models for predicting type annotations in Python. Currently, we are working on the Type4Py model \cite{mir2021type4py}, which is trained on the earlier version of the ManyTypes4Py dataset. The experimental results show that the model trained on our dataset is overall more accurate when compared to the same model trained on a smaller dataset \cite{mir2021type4py}.
+
+In summary, the paper has the following contributions:
+\begin{itemize}
+	\item \textbf{ManyTypes4Py dataset}, which features 5,382 Python projects with more than 869K type annotations.
+	\item \textbf{LibSA4Py tool}, which statically analyzes Python projects to extract type hints and features for training ML-based type inference models. The tool is publicly available on a GitHub repository\footnote{https://github.com/saltudelft/libsa4py}.
+\end{itemize}
 
 
 \begin{figure*}[!t]
@@ -66,19 +73,37 @@ Concerning the ML-based type inferece for DPLs, it is difficult to create a benc
 \end{figure*}
 
 \section{Methodology}
-We created ManyType4Py dataset using the following methodology:
+We created the ManyType4Py dataset using the following methodology:
 
 \begin{itemize}
-	\item To find Python projects with type annotations, we intuitively search for projects that has mypy as a depdendency on libraries.io. Since mypy is the most used type checker for Python, projects that use mypy have most likely type annotations. Our search resulted in 5,382 Python projects that are publicly available on GitHub. We cloned all the discovered projects on the disk in Sep. 2020 and finally created a file that contains projects' URL and their latest commit hash. The resulting dataset is roughly 60 GB in size before pre-processing.
+	\item To find Python projects with type annotations, we intuitively search for projects that has mypy as a depdendency on libraries.io. Since mypy is the most used type checker for Python, projects that use mypy have most likely type annotations. Our search resulted in 5,382 Python projects that are publicly available on GitHub. We cloned all the discovered projects on the disk in Sep. 2020 and finally created a file that contains projects' URL and their latest commit hash.
 	\item As demonstrated by Allamanis \cite{allamanis2019adverse}, it is essential to de-duplicate a code corpora. Because code duplication negatively affects the performance of machine learning models when testing on duplicated code corpora. Following this, we de-duplicated the collected Python corpora in the previous step using our code de-duplication tool, namely, CD4Py\footnote{https://github.com/saltudelft/CD4Py}. In short, the CD4Py tool tokenizes Python source code files, vectorizes files using term frequency-inverse document (TF-IDF), and performs $k$-nearest neighbor search to identify candidate duplicates files. Out of 636,383 Python source code files, 354,409 files were identified as duplicate and they are removed from the code corpora.
 	\item After the removal of duplicate files, we split the Python code corpora into three sets by files, i.e., 70\% training data, 10\% validation data, and 20\% test data. This is a common practice that is considered in recent research work \cite{pradel2019typewriter, allamanis2020typilus}, concerning machine learning-based models for type inference.
 	% file extensions removal might worth mentioning here
-	\item Given the de-duplicated code corpora and a list of files for the three sets, we ran our light-weight static analysis pipeline, which is depicted in Figure \ref{fig:overview-pipeline-sa}. First, the Abstract Syntax Tree (AST) of Python source files are extracted and nodes in ASTs are visited. Second, using the light-weight static analyzer, type-related information are extracted from imports, modules, classes, and functions. Third, the seq2seq representation of source code files \cite{hellendoorn2018deep} are generated by removing comments, string, number literals, and propagating types. Forth, common NLP practices such as tokenization and lemmatization are applied to idenfier names in source code files. Finally, the processed Python projects are stored as a JSON-formatted file which is described in Table \ref{tab:json-fields}. 
+	\item Given the de-duplicated code corpora and a list of files for the three sets, we ran our light-weight static analysis pipeline, which is depicted in Figure \ref{fig:overview-pipeline-sa}. First, the Abstract Syntax Tree (AST) of Python source files are extracted and nodes in ASTs are visited. Second, inspired by recent ML-based type inference approaches \cite{pradel2019typewriter, malik2019nl2type}, type hints and features are statically extracted from imports, modules, classes, and functions. Third, the seq2seq representation of source code files \cite{hellendoorn2018deep} are generated by removing comments, string, number literals, and propagating types. Forth, common NLP practices such as tokenization and lemmatization are applied to idenfier names in source code files. Finally, the processed Python projects are stored as a JSON-formatted file which is described in Table \ref{tab:json-fields}. 
 \end{itemize}
 
-After completing all the aforementioned steps, a zip file is created which contains: (1) JSON file of processed projects (2) a file containing projects' URL and their latest commit hash (3) a file containing duplicate files in the dataset (4) a CSV file containing a list of files and their corresponding set. The ManyTypes4Py dataset together with its helper scripts and instructions are publicly available on GitHub\footnote{https://github.com/saltudelft/many-types-4-py-dataset}.
+After completing all the aforementioned steps, a zip file is created which contains: (1) JSON file of processed projects (2) a file containing projects' URL and their latest commit hash (3) a file containing duplicate files in the dataset (4) a CSV file containing a list of files and their corresponding set. The latest version of the ManyTypes4Py dataset can be downloaded on zenodo\footnote{https://zenodo.org/record/4438608}. The helper scripts and instructions for preparing the data are publicly available on a GitHub repository\footnote{https://github.com/saltudelft/many-types-4-py-dataset}.
+
+\begin{table}[!t]
+	\centering
+	\label{tab:dup-stats}
+	\caption{Duplication statistics across the ManyTypes4Py dataset}
+	\begin{tabular}{c c}
+		\toprule
+		Duplication stats & Value \\
+		\midrule
+		\# Detected duplicate files & 400,245 (78.43\%) \\
+		\# Detected clusters & 45,836 \\
+		Avg. \# of files per clusters & 8.73 \\
+		Median \# of files per clones & 3.00 \\
+		Duplication ratio & 69.45\% \\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 \section{Description}
+Before describing the charactersitics of the ManyTypes4Py dataset, we first describe the duplication statistics across the dataset, which is shown in Table \ref{tab:dup-stats}.
 
 \begin{table*}[t]
 	\centering
@@ -147,52 +172,36 @@ After completing all the aforementioned steps, a zip file is created which conta
 
 \begin{table}
 	\centering
-	\caption{Duplication statistics across the ManyTypes4Py dataset}
-	\begin{tabular}{c c}
-		\toprule
-		Duplication stats & Value \\
-		\midrule
-		\# Detected duplicate files & 400,245 (78.43\%) \\
-		\# Detected clusters & 45,836 \\
-		Avg. \# of files per clusters & 8.73 \\
-		Median \# of files per clones & 3.00 \\
-		Duplication ratio & 69.45\% \\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-\begin{table}
-\centering
-\caption{Characteristics of the ManyTypes4Py Dataset}
-\begin{threeparttable}
-\begin{tabular}{l c}
-	\toprule
-	Metrics & Value \\
-	\midrule
-	Repositories & 5,382 \\
-	Files & 183,916 \\
-	Lines of code\tnote{a} & 22M \\
-	\midrule
-	Functions & 2,096,797 \\
-	...with comment & 1,129,573 (53.8\%) \\
-	...with return type annotations & 325,532 (15.5\%)  \\
-	\midrule
-	Arguments & 3,923,667 \\
-	...with comment & 220,976 (5.6\%) \\ 
-	...with type annotations & 480,793 (12.2\%) \\
-	\midrule
-	Types & 869,825 \\
-	...unique & 67,060 \\
-	\bottomrule
-\end{tabular}
-	\begin{tablenotes}
-	\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
-\end{tablenotes}
-\end{threeparttable}
+	\caption{Characteristics of the ManyTypes4Py Dataset}
+	\begin{threeparttable}
+		\begin{tabular}{l c}
+			\toprule
+			Metrics & Value \\
+			\midrule
+			Repositories & 5,382 \\
+			Files & 183,916 \\
+			Lines of code\tnote{a} & 22M \\
+			\midrule
+			Functions & 2,096,797 \\
+			...with comment & 1,129,573 (53.8\%) \\
+			...with return type annotations & 325,532 (15.5\%)  \\
+			\midrule
+			Arguments & 3,923,667 \\
+			...with comment & 220,976 (5.6\%) \\ 
+			...with type annotations & 480,793 (12.2\%) \\
+			\midrule
+			Types & 869,825 \\
+			...unique & 67,060 \\
+			\bottomrule
+		\end{tabular}
+		\begin{tablenotes}
+			\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
+		\end{tablenotes}
+	\end{threeparttable}
 \end{table}
 
 
-\begin{figure}[!t]
+\begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figs/top-10-most-frequent-types.pdf}
 	\caption{Top 10 most frequent types in the ManyTypes4Py dataset}
