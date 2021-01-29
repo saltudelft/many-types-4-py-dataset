@@ -90,7 +90,7 @@ After completing all the aforementioned steps, a zip file is created which conta
 	\centering
 	\label{tab:dup-stats}
 	\caption{Duplication statistics across the ManyTypes4Py dataset}
-	\begin{tabular}{c c}
+	\begin{tabular}{l c}
 		\toprule
 		Duplication stats & Value \\
 		\midrule
@@ -103,6 +103,41 @@ After completing all the aforementioned steps, a zip file is created which conta
 	\end{tabular}
 \end{table}
 
+\begin{table*}[!t]
+	\centering
+	\label{tab:char-dataset}
+	\caption{Characteristics of the ManyTypes4Py Dataset}
+	\begin{threeparttable}
+		\begin{tabular}{l c c c c}
+			\toprule
+			Metrics & \multicolumn{4}{@{} c @{}}{Dataset}  \\
+			\cmidrule{2-5}
+			& All & Training & Validation & Test \\
+			\midrule
+			Repositories & 5,382 & 4,913 & 2,789 & 3,796 \\
+			Lines of code\tnote{a} & 22M & - & - & - \\
+			\midrule
+			Files & 183,916  & 132,409 & 14,675 & 36,832 \\
+			...with type annotations & 50,838 (27.6\%) & 36,542 & 4,105  & 10,191  \\
+			\midrule
+			Functions & 2,096,797 & 1,509,048 & 169,519 & 418,230 \\
+			...with comment & 1,129,573 (53.8\%) & 812,632 & 91,325 & 225,616 \\
+			...with return type annotations & 325,532 (15.5\%) & 234,319 & 26,104 & 65,109 \\
+			\midrule
+			Arguments & 3,923,667 & 2,822,699 & 310,685 & 790,283 \\
+			...with comment & 220,976 (5.6\%) & 159,453 & 16,924 & 44,599 \\ 
+			...with type annotations & 480,793 (12.2\%) & 347,898 & 37,148 & 95,747 \\
+			\midrule
+			Types & 869,825 & 347,898 & 89,334 & 192,102 \\
+			...unique & 67,060 & 53,614 & 13,995 & 23,572 \\
+			\bottomrule
+		\end{tabular}
+		\begin{tablenotes}
+			\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
+		\end{tablenotes}
+	\end{threeparttable}
+\end{table*}
+
 \section{Description}
 Before describing the characteristics of the ManyTypes4Py dataset, we first describe the duplication statistics across the dataset, which is shown in Table \ref{tab:dup-stats}. The duplication of the dataset is 69.45\% as detected by the CD4Py tool. However, this is in line with the findings of Lopes et al. \cite{lopes2017dejavu}, which showed that the Python ecosystem on GitHub has 71\% file-level duplicates. It should be noted that the duplication ratio is obtained using the following formula:
 \begin{equation}
@@ -114,43 +149,17 @@ The characteristics of the ManyTypes4Py are shown in Table \ref{tab:char-dataset
 
 As shown in Table \ref{tab:char-dataset}, there are a total of 869,825 type annotations and 67,060 unqiue types in the ManyTypes4Py dataset. To demonstrate the distribution of types, top 10 most frequent types in the dataset are shown in Figure \ref{fig:top-10-types}. Of 869,825 types, 50.56\% of them are present in the top 10 most frequent types. As can be observed from Figure \ref{fig:top-10-types}, types follow a long-tail distribution. In other words, the majority of type annotations are either \texttt{str}, \texttt{None}, \texttt{int}, or \texttt{bool}.
 
-\begin{table}[!t]
+\begin{figure}[!t]
 	\centering
-	\label{tab:char-dataset}
-	\caption{Characteristics of the ManyTypes4Py Dataset}
-	\begin{threeparttable}
-		\begin{tabular}{l c}
-			\toprule
-			Metrics & Value \\
-			\midrule
-			Repositories & 5,382 \\
-			Lines of code\tnote{a} & 22M \\
-			\midrule
-			Files & 183,916 \\
-			...with type annotations & 50,838 (27.6\%) \\
-			\midrule
-			Functions & 2,096,797 \\
-			...with comment & 1,129,573 (53.8\%) \\
-			...with return type annotations & 325,532 (15.5\%)  \\
-			\midrule
-			Arguments & 3,923,667 \\
-			...with comment & 220,976 (5.6\%) \\ 
-			...with type annotations & 480,793 (12.2\%) \\
-			\midrule
-			Types & 869,825 \\
-			...unique & 67,060 \\
-			\bottomrule
-		\end{tabular}
-		\begin{tablenotes}
-			\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
-		\end{tablenotes}
-	\end{threeparttable}
-\end{table}
+	\includegraphics[width=\linewidth]{figs/top-10-most-frequent-types.pdf}
+	\caption{Top 10 most frequent types in the ManyTypes4Py dataset}
+	\label{fig:top-10-types}
+\end{figure}
 
 As stated in Section \ref{sec:method}, the dataset provides processed Pythons in JSON-formatted files, which contains various type hints and features. As of this writing, there are 23 fields in JSON-formatted files that are described in Table \ref{tab:json-fields}. Of 23 extracted fields, 16 of them are natural/contextual type hints or features that can be used for training ML-based type inference models. For instance, the \texttt{name} field stores the name of a class or a function, which is a natural source of information for predicting types \cite{malik2019nl2type}. The \texttt{ret\_exprs} and \texttt{params\_occur} fields provide return expression(s) of a function and usages of functions' parameter(s) in its body, respectively. These are considered contextual type hints and the context in which a variable or an argument is used provides a hint for predicting types \cite{pradel2019typewriter}. Lastly, the \texttt{untyped\_seq} and \texttt{typed\_seq} fields provide the normalized seq2seq representation of a Python source code file and the type of identifiers in the file, respectively. They both can directly be used for training an ML-based type inference model.
 
 
-\begin{table*}[t]
+\begin{table*}[!t]
 	\centering
 	\caption{Description of fields in the JSON file of projects produced by the pipeline}
 	\label{tab:json-fields}
@@ -215,31 +224,23 @@ As stated in Section \ref{sec:method}, the dataset provides processed Pythons in
 	\end{tabular}
 \end{table*}
 
-
-
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{figs/top-10-most-frequent-types.pdf}
-	\caption{Top 10 most frequent types in the ManyTypes4Py dataset}
-	\label{fig:top-10-types}
-\end{figure}
-
 \section{Applications}
-The ManyTypes4Py dataset has two applications, i.e., ML-based type inference and code completion, which are briefly described below.
-% Type inference 
-\paragraph{\textbf{ML-based type inference}} In this task, ML models are trained to predict the type of functions' arguments, return types, and variables for DPLs (e.g. Python). To do so, the AST of source code files are analyzed to extract features that give a hint for predicting types. By processing ASTs, The dataset provides common features, i.e., natural and contextual type hints that can be employed to create code embeddings and train an ML model. Moreover, the provided seq2seq representation of source code files give the full context around identifiers.
+\paragraph{\textbf{ML-based type inference}} In this task, ML models are trained to predict the type of functions' arguments, return types, and variables for DPLs (e.g. Python). To do so, the AST of source code files are analyzed to extract features that give a hint for predicting types. By processing ASTs, the ManyTypes4Py dataset provides common features, i.e., natural and contextual type hints that can be employed to create code embeddings and train an ML model. Moreover, the provided seq2seq representation of source code files gives the full context around identifiers.
 
 % Code compeletion
-\paragraph{\textbf{Learning-based code completion}}
+\paragraph{\textbf{Learning-based code completion}} In this application, an ML model is expected to predict part of a word or token for a function or a variable. For DPLs, code completion is a challenging task as there is no type of information available. To overcome this, ASTs are statically analyzed while providing type information \cite{svyatkovskiy2019pythia}. The ManyTypes4Py dataset can be used as a baseline for training a code completion model as it provides partial type annotations for functions and variables. Also, our AST analysis pipeline (LibSA4Py tool) can further be extended to infer types of nodes and variables for simple cases.
 
-\section{Challenges}
+\section{Limitations}
+Currently, our static analysis pipeline cannot parse source code files in Python 2. Therefore, Python2-style type annotations\footnote{https://www.python.org/dev/peps/pep-0484/\#suggested-syntax-for-python-2-7-and-straddling-code} cannot be extracted. Due to this limitation, about 1\% of source code files in the dataset cannot be parsed.
 
 \section{Related Work}
 There are several Python code corpora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed the Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} accompanies with a relatively small dataset that contains 600 Python projects. Moreover, the source code files of Typilus' dataset are converted to graph representations that are only suitable for training the Typilus model. However, the ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models. Raychev et al. \cite{raychev2016probabilistic} published the Python-150K dataset in 2016, which contains 8,422 Python projects. Unlike our dataset, the Python-150K dataset \cite{raychev2016probabilistic} is not collected for the ML-based type inference task, meaning that a large of number projects in the dataset may not have type annotations at all. Moreover, Allamanis \cite{allamanis2019adverse} showed that the Python-150K dataset suffers from duplication despite the removal of project forks.
 
 
 \section{Conclusion}
+We present the ManyTypes4Py dataset, a benchmark dataset for ML-based type inference. It contains 5,382 Python projects from GitHub with more than 869K type annotations. The collected Python projects were de-duplicated by removing duplicate source code files to ensure that trained ML models do not have duplication bias. Using the accompanying LibSA4Py tool, the AST of Python source code files were analyzed to provide 16 type hints plus seq2seq representation for training ML-based type inference models. For each analyzed project, the result of the AST analysis is saved in a JSON-formatted file. Although the dataset's main application is ML-based type inference, it can be a useful baseline for learning-based code completion.
+
+In the near future, we will extend our static analysis pipeline (LibSA4Py tool) to add more type annotations to the dataset by implementing cheap and simple type inference heuristics. Also, we will perform data and control flow analysis to create graph representation of source code files for training graph-based neural models. To include more projects with type annotations, we will consider projects that use other type checkers other than mypy.
 
 \section*{Acknowledgment}
 
