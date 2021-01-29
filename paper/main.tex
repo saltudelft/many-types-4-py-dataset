@@ -14,7 +14,7 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{ManyTypes4Py: A benchmark dataset for machine learning-based type inference\\
+\title{ManyTypes4Py: A benchmark Python dataset for machine learning-based type inference\\
 %{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
 %should not be used}
 %\thanks{Identify applicable funding agency here. If none, delete this.}
@@ -42,10 +42,11 @@ g.gousios@tudelft.nl}
 \maketitle
 
 \begin{abstract}
-
+In this paper, we present a large Python dataset for the machine learning (ML)-based type inference application, namely, ManyTypes4Py. The dataset contains a total of 5,382 Python projects with more than 869K type annotations. Duplicate source code files were removed from the dataset to eliminate the negative effect of the duplication bias. To facilitate training and evaluation of ML models, the dataset was split into training, validation and test sets by files. To extract type information from abstract syntax trees (ASTs), a light-weight static analyzer pipeline is developed and accompanied with the dataset. Using this pipeline, the collected Python projects were analyzed and the results of the AST analysis were stored in JSON-formatted files. The ManyTypes4Py dataset is shared on zenodo and its tools are publicly available on GitHub.
 \end{abstract}
 
 \begin{IEEEkeywords}
+Type Inference, Machine Learning, Python, Type Annotations, Static Analysis
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -243,6 +244,7 @@ We present the ManyTypes4Py dataset, a benchmark dataset for ML-based type infer
 In the near future, we will extend our static analysis pipeline (LibSA4Py tool) to add more type annotations to the dataset by implementing cheap and simple type inference heuristics. Also, we will perform data and control flow analysis to create graph representation of source code files for training graph-based neural models. To include more projects with type annotations, we will consider projects that use other type checkers other than mypy.
 
 \section*{Acknowledgment}
+This research work was funded by H2020 grant 825328 (FASTEN).
 
 \bibliographystyle{IEEEtran}
 \bibliography{main}
