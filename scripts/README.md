@@ -28,3 +28,7 @@
 `python3 split_dataset.py [dataset] --od [output_path] --test [test] --valid [valid]`
 
 - Splits the dataset's `.py` files into test, train and validation sets. `test` defines the ratio (from 0.0 to 1.0) to use for the test set, while `valid` defines this ratio for the validation set. The script outputs a CSV file to `output_path`, where each row is in shape: `type,path`, where `type` equals one of: `{train, test, valid}`.
+
+`./reset_commits.sh [spec file] [dataset]`
+
+- Resets commits on all projects in the `dataset` folder to the commit hashes given in the provided `spec file`. Commits are reset by means of `git reset --hard [hash]`.

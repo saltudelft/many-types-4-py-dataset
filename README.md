@@ -1,11 +1,6 @@
 # many-types-4-py-dataset
 ManyTypes4Py: A benchmark dataset for machine learning-based type inference
 
-To generate the manifest file of the dataset, use the following command:
-```bash
-find . -type d -mindepth 3 -maxdepth 3 -execdir sh -c 'echo "$(git config --get remote.origin.url) $(git log -n1 --format=format:"%H")"' \; | uniq > ManyTypes4PyDataset.spec
-```
-
 ## Dataset preparation
 **Pre-requisites:**
 * Python dependencies from `scripts/requirements.txt` installed (run `pip install -r scripts/requirements.txt`)
@@ -19,9 +14,13 @@ Run `./prepare_dataset.sh [dataset path]` in order to generate & prepare:
 
 ### Steps
 
-1. Generate spec-file - a CSV file, where rows consist of an URL and hash commit of the repository.
+0. Clone the dataset:
 
-    - `find . -type d -mindepth 3 -maxdepth 3 -execdir sh -c 'echo "$(git config --get remote.origin.url) $(git log -n1 --format=format:"%H")"' \; | uniq > ManyTypes4PyDataset.spec`
+    - `python -m repo_cloner -i mypy-dependents-by-stars.json -o repos`
+
+1. Generate manifset file of the dataset (rows consist of an URL and hash commit of the repository, separated by space):
+
+    - ```bash find . -type d -mindepth 3 -maxdepth 3 -execdir sh -c 'echo "$(git config --get remote.origin.url) $(git log -n1 --format=format:"%H")"' \; | uniq > ManyTypes4PyDataset.spec```
 
 
 2. Generate duplicate tokens for dataset using `cd4py`
