@@ -32,3 +32,11 @@
 `./reset_commits.sh [spec file] [dataset]`
 
 - Resets commits on all projects in the `dataset` folder to the commit hashes given in the provided `spec file`. Commits are reset by means of `git reset --hard [hash]`.
+
+## Generating dataset's manifest file
+Run the following command in the folder where repositories are stored.
+```
+bash find . -type d -mindepth 3 -maxdepth 3 -execdir sh -c 'echo "$(git config --get remote.origin.url) $(git log -n1 --format=format:"%H")"' \; | uniq > ManyTypes4PyDataset.spec
+```
+
+It generates a file in which rows consist of an URL and hash commit of the repository, separated by space
