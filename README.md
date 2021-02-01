@@ -1,16 +1,18 @@
 # ManyTypes4Py: A benchmark Python Dataset for Machine Learning-Based Type Inference
-## Dataset preparation
-### Requirements
+
+# Downloading dataset
+The latest version of the dataset is publicly available on [zenodo](https://zenodo.org/record/4479714).
+
+# Dataset preparation
+We highly recommend to download the latest version of the dataset as described above. If you want to manually prepare the dataset, follow below instructions.
+
+## Requirements
+
+* Python 3.5 or newer
 * Python dependencies from `scripts/requirements.txt` installed (run `pip install -r scripts/requirements.txt`)
-* A repositories folder (dataset), where git projects are stored in format `[dataset path]/author/repo`
+* Install the `libsa4py` package (run `git clone https://github.com/saltudelft/libsa4py.git && cd libsa4py && pip install .`)
 
-Run `./prepare_dataset.sh [dataset path]` in order to generate & prepare:
-* A de-duplicated dataset
-* Spec file for each project of the dataset (git url + commit)
-* Train/test/validation split of the project (python code) files
-* List of found duplicate files (that were also removed in the de-duped dataset)
-
-### Steps
+## Steps
 
 0. Clone the dataset:
 
