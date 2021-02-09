@@ -24,5 +24,8 @@ python3 process_dataset.py repos_ ManyTypes4Py/duplicate_files.txt repos
 python3 split_dataset.py repos --od ManyTypes4Py/dataset_split.csv
 mv repos ManyTypes4Py/repos
 
-# 6. Zip contents
+# 6. Create JSON representations of source code files
+libsa4py process --p ManyTypes4Py/repos --o ManyTypes4Py/processed_projects --s ManyTypes4Py/dataset_split.csv
+
+# 7. Zip contents
 tar -czvf dataset.tar.gz ManyTypes4Py
