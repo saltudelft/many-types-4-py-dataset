@@ -4,7 +4,7 @@
 The latest version of the dataset is publicly available on [zenodo](https://zenodo.org/record/4479714).
 
 # Dataset preparation
-We highly recommend to download the latest version of the dataset as described above. If you want to manually prepare the dataset, follow below instructions.
+We highly recommend downloading the latest version of the dataset as described above. If you want to manually prepare the dataset, follow below instructions.
 
 ## Requirements
 
