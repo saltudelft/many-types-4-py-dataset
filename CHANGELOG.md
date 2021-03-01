@@ -1,7 +1,9 @@
 # Changelog
 All notable changes to the ManyTypes4Py dataset will be documented in this file.
 
-
+## [0.4] - 2021-03-01
+- Added type annotations coverage for processed projects and their source code files. See the `type_annot_cove` field in JSON files.
+ 
 ## [0.3] - 2021-01-29
 - Fixed the path issue in `dataset_split.csv` file for some file paths that contains non-ASCII characters.
 - With the new fixes to the [LibSA4py](https://github.com/saltudelft/libsa4py) tool, more source code files were processed for included Python projects.
