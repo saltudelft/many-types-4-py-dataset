@@ -14,7 +14,7 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{ManyTypes4Py: A benchmark Python dataset for machine learning-based type inference\\
+\title{ManyTypes4Py: A Benchmark Python Dataset for Machine Learning-based Type Inference\\
 %{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
 %should not be used}
 %\thanks{Identify applicable funding agency here. If none, delete this.}
@@ -58,7 +58,7 @@ In recent years, dynamic programming languages (DPLs) have become immensely popu
 
 ML techniques need a sufficiently large dataset to achieve an acceptable level of generalization for the task at hand \cite{sun2017revisiting}. Concerning the ML-based type inference for DPLs, it is difficult to create a benchmark dataset that contains software projects with a sufficient number of type annotations. Because of the optional static typing, many software projects written in DPLs lack type annotations. Nevertheless, to train an ML-based type inference model for Python, researchers created their own dataset by either gathering a small set of projects with type annotations \cite{pradel2019typewriter} or employ static type inference tools to add type annotations to existing projects \cite{allamanis2020typilus}.
 
-We believe that there is a need for a large benchmark dataset that facilitates training ML-based type inference models, especially for Python. Unlike TypeScript's compiler, the Python interpreter cannot infer the type of variables or function signatures. Motivated by this, we present the ManyTypes4Py dataset, a large dataset to train ML models for predicting type annotations in Python. Currently, we are working on the Type4Py model \cite{mir2021type4py}, which is trained on the earlier version of the ManyTypes4Py dataset. The experimental results show that the model trained on our dataset is overall more accurate when compared to the same model trained on a smaller dataset \cite{mir2021type4py}.
+We believe that there is a need for a large benchmark dataset that facilitates training ML-based type inference models, especially for Python. Unlike TypeScript's compiler, the Python interpreter cannot infer the type of variables or function signatures at compile time \cite{scott16}. Motivated by this, we present the ManyTypes4Py dataset, a large dataset to train ML models for predicting type annotations in Python. Currently, we are working on the Type4Py model \cite{mir2021type4py}, which is trained on the earlier version of the ManyTypes4Py dataset. The experimental results show that the model trained on our dataset is overall more accurate when compared to the same model trained on a smaller dataset \cite{mir2021type4py}.
 
 In summary, the paper has the following contributions:
 \begin{itemize}
@@ -115,8 +115,8 @@ After completing all the aforementioned steps, a zip file is created which conta
 			\cmidrule{2-5}
 			& All & Training & Validation & Test \\
 			\midrule
-			Repositories & 5,382 & 4,913 & 2,789 & 3,796 \\
-			Lines of code\tnote{a} & 22M & - & - & - \\
+			Repositories\tnote{a} & 5,382 & 4,913 & 2,789 & 3,796 \\
+			Lines of code\tnote{b} & 22M & - & - & - \\
 			\midrule
 			Files & 183,916  & 132,409 & 14,675 & 36,832 \\
 			...with type annotations & 50,838 (27.6\%) & 36,542 & 4,105  & 10,191  \\
@@ -134,7 +134,8 @@ After completing all the aforementioned steps, a zip file is created which conta
 			\bottomrule
 		\end{tabular}
 		\begin{tablenotes}
-			\item[a] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
+			\item[a] {\footnotesize Note that there is an intersection among repositories in the three sets as the dataset is split by files.}
+			\item[b] {\footnotesize Comments and blank lines are ignored when counting lines of code.}
 		\end{tablenotes}
 	\end{threeparttable}
 \end{table*}
@@ -242,8 +243,8 @@ We present the ManyTypes4Py dataset, a benchmark Python dataset for ML-based typ
 
 In the near future, we will extend our static analysis pipeline (LibSA4Py tool) to add more type annotations to the dataset by implementing cheap and simple type inference heuristics. Also, we will perform data and control flow analysis to create graph representation of source code files for training graph-based neural models. To include more projects with type annotations, we will consider projects that use other type checkers other than mypy.
 
-%\section*{Acknowledgment}
-%This research work was funded by H2020 grant 825328 (FASTEN).
+\section*{Acknowledgment}
+This research work was funded by H2020 grant 825328 (FASTEN).
 
 \bibliographystyle{IEEEtran}
 \bibliography{main}
