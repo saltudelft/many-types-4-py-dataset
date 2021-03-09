@@ -109,7 +109,7 @@ After completing all the aforementioned steps, a zip file is created which conta
 	\label{tab:char-dataset}
 	\caption{Characteristics of the ManyTypes4Py Dataset}
 	\begin{threeparttable}
-		\begin{tabular}{l c c c c}
+		\begin{tabular}{l l l l l}
 			\toprule
 			Metrics & \multicolumn{4}{@{} c @{}}{Dataset}  \\
 			\cmidrule{2-5}
@@ -163,7 +163,7 @@ As stated in Section \ref{sec:method}, the dataset provides processed Python pro
 
 \begin{table*}[!t]
 	\centering
-	\caption{Description of fields in the JSON file of projects produced by the pipeline}
+	\caption{Description of fields in the JSON file of projects produced by the LibSA4Py pipeline}
 	\label{tab:json-fields}
 	\begin{tabular}{c l}
 		\toprule
@@ -183,7 +183,7 @@ As stated in Section \ref{sec:method}, the dataset provides processed Python pro
 		\midrule
 		\texttt{typed\_seq} & Contains the type of identifiers in \texttt{untyped\_seq} if present. Otherwise $0$ is inserted. \\
 		\midrule
-		\texttt{imports} & Contains the name of imports in an analyzed source code file. \\
+		\texttt{imports} & Contains the name of imports in an analyzed source code file \\
 		\midrule
 		\texttt{variables} & Contains variables' name and their type defined in a module (i.e. global variables) \\
 		\midrule
@@ -230,16 +230,16 @@ As stated in Section \ref{sec:method}, the dataset provides processed Python pro
 \paragraph{\textbf{ML-based type inference}} In this task, ML models are trained to predict the type of functions' arguments, return types, and variables for DPLs (e.g. Python). To do so, the AST of source code files are analyzed to extract features that give a hint for predicting types. By processing ASTs, the ManyTypes4Py dataset provides common features, i.e., natural and contextual type hints that can be employed to create code embeddings and train an ML model. Moreover, the provided seq2seq representation of source code files gives the full context around identifiers.
 
 % Code compeletion
-\paragraph{\textbf{Learning-based code completion}} In this application, an ML model is expected to predict part of a word or token for a function or a variable. For DPLs, code completion is a challenging task as there is no type of information available. To overcome this, ASTs are statically analyzed while providing type information \cite{svyatkovskiy2019pythia}. The ManyTypes4Py dataset can be used as a baseline for training a code completion model as it provides partial type annotations for functions and variables. Also, our AST analysis pipeline (LibSA4Py tool) can further be extended to infer types of nodes and variables for simple cases.
+\paragraph{\textbf{Learning-based code completion}} In this application, an ML model is expected to predict part of a word or token for a function or a variable. For DPLs, code completion is a challenging task as there is no type information available. To overcome this, ASTs are statically analyzed while providing type information \cite{svyatkovskiy2019pythia}. The ManyTypes4Py dataset can be used as a baseline for training a code completion model as it provides partial type annotations for functions and variables. Also, our AST analysis pipeline (LibSA4Py tool) can further be extended to infer types of nodes and variables for simple cases.
 
 \section{Limitations}
 Currently, our static analysis pipeline cannot parse source code files in Python 2. Therefore, Python2-style type annotations\footnote{https://www.python.org/dev/peps/pep-0484/\#suggested-syntax-for-python-2-7-and-straddling-code} cannot be extracted. Due to this limitation, about 1\% of source code files in the dataset cannot be parsed.
 
 \section{Related Work}
-There are several Python code corpora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed the Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} is accompanied by a dataset that contains 600 Python projects. Moreover, the source code files of Typilus' dataset are converted to graph representations that are only suitable for training the Typilus model. The ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models. Raychev et al. \cite{raychev2016probabilistic} published the Python-150K dataset in 2016, which contains 8,422 Python projects. Unlike our dataset, the Python-150K dataset \cite{raychev2016probabilistic} is not collected solely for the ML-based type inference task, meaning that a large of number projects in the dataset may not have type annotations at all, especially given the time that the dataset was created. Allamanis \cite{allamanis2019adverse} showed that the Python-150K dataset suffers from code duplication despite the removal of project forks.
+There are several Python code corpora that can be used for machine learning-based type inference. Recently, Allamanis et al. \cite{allamanis2020typilus} proposed the Typilus model, which is a graph-based neural model that predicts type annotations for Python. The Typilus model \cite{allamanis2020typilus} is accompanied by a dataset that contains 600 Python projects. Moreover, the source code files of Typilus' dataset are converted to graph representations that are only suitable for training the Typilus model. The ManyTypes4Py dataset provides JSON-formatted analyzed source code files that contains useful type hints for training various machine learning models. Raychev et al. \cite{raychev2016probabilistic} published the Python-150K dataset in 2016, which contains 8,422 Python projects. Unlike our dataset, the Python-150K dataset \cite{raychev2016probabilistic} is not collected solely for the ML-based type inference task, meaning that a large number of projects in the dataset may not have type annotations at all, especially given the time that the dataset was created. Allamanis \cite{allamanis2019adverse} showed that the Python-150K dataset suffers from code duplication despite the removal of project forks.
 
 \section{Conclusion}
-We present the ManyTypes4Py dataset, a benchmark Python dataset for ML-based type inference. It contains 5,382 Python projects from GitHub with more than 869K type annotations. The collected Python projects were de-duplicated by removing duplicate source code files to ensure that trained ML models do not have duplication bias. Using the accompanying LibSA4Py tool, the AST of Python source code files were analyzed to provide 16 type hints plus a seq2seq representation for training ML-based type inference models. For each analyzed project, the result of the AST analysis is saved in a JSON-formatted file. Although the dataset's main application is ML-based type inference, it can be a useful baseline for learning-based code completion.
+In this paper, we present the ManyTypes4Py dataset, a benchmark Python dataset for ML-based type inference. It contains 5,382 Python projects from GitHub with more than 869K type annotations. The collected Python projects were de-duplicated by removing duplicate source code files to ensure that trained ML models do not have duplication bias. Using the accompanying LibSA4Py tool, the AST of Python source code files were analyzed to provide 16 type hints plus a seq2seq representation for training ML-based type inference models. For each analyzed project, the result of the AST analysis is saved in a JSON-formatted file. Although the dataset's main application is ML-based type inference, it can be a useful baseline for learning-based code completion.
 
 In the near future, we will extend our static analysis pipeline (LibSA4Py tool) to add more type annotations to the dataset by implementing cheap and simple type inference heuristics. Also, we will perform data and control flow analysis to create graph representation of source code files for training graph-based neural models. To include more projects with type annotations, we will consider projects that use other type checkers other than mypy.
 
