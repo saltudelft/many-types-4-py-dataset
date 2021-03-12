@@ -1,5 +1,9 @@
 # Changelog
 All notable changes to the ManyTypes4Py dataset will be documented in this file.
+Each version of the dataset can be downloaded on [zenodo](https://zenodo.org/search?page=1&size=20&q=conceptrecid:4044635&all_versions&sort=-version).
+
+## [0.5] 2021-03-12
+- Added name-based visible type hints for processed projects in the `extracted_visible_types` folder.
 
 ## [0.4] - 2021-03-01
 - Added type annotations coverage for processed projects and their source code files. See the `type_annot_cove` field in JSON files.
