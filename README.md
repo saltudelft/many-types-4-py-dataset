@@ -17,13 +17,13 @@ We highly recommend downloading the latest version of the dataset as described a
 0. Clone the dataset:
 
     ```
-    python -m repo_cloner -i ../mypy-dependents-by-stars.json -o repos
+    python -m repo_cloner -i ./mypy-dependents-by-stars.json -o repos
     ```
     
 1. To change the state of the cloned repositories to the ManyType4Py's, run the following command on the `ManyTypes4PyDataset.spec`:
     
     ```
-    ./scripts/reset_commits.sh  ../ManyTypes4PyDataset.spec repos
+    ./scripts/reset_commits.sh  ./ManyTypes4PyDataset.spec repos
     ``` 
 
 2. Generate duplicate tokens for dataset using `cd4py`
