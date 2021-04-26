@@ -1,7 +1,15 @@
 # ManyTypes4Py: A benchmark Python Dataset for Machine Learning-Based Type Inference
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4719447.svg)](https://doi.org/10.5281/zenodo.4719447)
+
+- It has more than **5.2K** Python repositories and **4.2M** type annotations.
+- Its projects were processed in JSON-formatted files using the [LibSA4Py](https://github.com/saltudelft/libsa4py) pipeline.
+- Its source files were already split into training, validation, and test sets for training ML models.
+- It is de-duplicated using [CD4Py](https://github.com/saltudelft/CD4Py).
+- It contains **Visible Type Hints** (VTHs), which is a deep, recursive, and dynamic analysis of types from the import statements of source files and their dependencies.
+- It is published in the datashow case of the **MSR'21** conference.
 
 # Downloading dataset
-The latest version of the dataset is publicly available on [zenodo](https://zenodo.org/record/4479714).
+The latest version of the dataset is publicly available on [zenodo](https://zenodo.org/record/4719447).
 
 # Dataset preparation
 We highly recommend downloading the latest version of the dataset as described above. If you want to manually prepare the dataset, follow below instructions.
