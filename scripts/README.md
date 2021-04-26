@@ -33,6 +33,9 @@
 
 - Resets commits on all projects in the `dataset` folder to the commit hashes given in the provided `spec file`. Commits are reset by means of `git reset --hard [hash]`.
 
+`./release_dataset.sh $PROCESSED_PROJECTS $VER_TAG`
+- Creates a compressed version of the dataset for releasing. Replace `$PROCESSED_PROJECTS` and `$VER_TAG` with the path to processed projects and a version tag (e.g. v0.6), respectively.
+
 ## Generating dataset's manifest file
 Run the following command in the folder where repositories are stored.
 ```

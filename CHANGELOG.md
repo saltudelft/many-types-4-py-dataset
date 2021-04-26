@@ -2,6 +2,10 @@
 All notable changes to the ManyTypes4Py dataset will be documented in this file.
 Each version of the dataset can be downloaded on [zenodo](https://zenodo.org/search?page=1&size=20&q=conceptrecid:4044635&all_versions&sort=-version).
 
+## [0.6] 2021-04-26
+- Processed projects have now the type of variables inferred by [Pyre](https://pyre-check.org/).
+- Visible type hints are added for the whole dataset. They are extracted recursively from the dataset's projects and their dependencies.
+
 ## [0.5] 2021-03-12
 - Added name-based visible type hints for processed projects in the `extracted_visible_types` folder.
 
