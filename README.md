@@ -6,7 +6,7 @@
 - Its source files were already split into training, validation, and test sets for training ML models.
 - It is de-duplicated using [CD4Py](https://github.com/saltudelft/CD4Py).
 - It contains **Visible Type Hints** (VTHs), which is a deep, recursive, and dynamic analysis of types from the import statements of source files and their dependencies.
-- It is published in the datashow case of the **MSR'21** conference.
+- It is published in the Data Showcase of the **MSR'21** conference.
 
 # Downloading dataset
 The latest version of the dataset is publicly available on [zenodo](https://zenodo.org/record/4719447).
