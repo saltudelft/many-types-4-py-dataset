@@ -1,6 +1,12 @@
 # ManyTypes4Py: A benchmark Python Dataset for Machine Learning-Based Type Inference
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4719447.svg)](https://doi.org/10.5281/zenodo.4719447)
 
+- [Intro](#intro)
+- [Download](#downloading-dataset)
+- [Preparation](#dataset-preparation)
+- [Citing MT4Py](#citing-the-dataset)
+
+# Intro
 - It has more than **5.2K** Python repositories and **4.2M** type annotations.
 - Its projects were processed in JSON-formatted files using the [LibSA4Py](https://github.com/saltudelft/libsa4py) pipeline.
 - Its source files were already split into training, validation, and test sets for training ML models.
@@ -71,3 +77,19 @@ We highly recommend downloading the latest version of the dataset as described a
     ```
     tar -czvf [output path] [dataset artifacts path]
     ```
+
+# Citing the dataset
+If you have used the dataset in your research work, please consider citing it.
+
+```
+@inproceedings{mt4py2021,
+author = {A. M. Mir and E. Latoskinas and G. Gousios},
+booktitle = {IEEE/ACM 18th International Conference on Mining Software Repositories (MSR)},
+title = {ManyTypes4Py: A Benchmark Python Dataset for Machine Learning-Based Type Inference},
+year = {2021},
+pages = {585-589},
+doi = {10.1109/MSR52588.2021.00079},
+publisher = {IEEE Computer Society},
+month = {May}
+}
+```
