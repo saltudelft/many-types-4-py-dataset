@@ -1,10 +1,11 @@
-# ManyTypes4Py: A benchmark Python Dataset for Machine Learning-Based Type Inference
+# ManyTypes4Py: A Benchmark Python Dataset for Machine Learning-based Type Inference
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4719447.svg)](https://doi.org/10.5281/zenodo.4719447)
 
 - [Intro](#intro)
 - [Download](#downloading-dataset)
 - [Preparation](#dataset-preparation)
 - [Citing MT4Py](#citing-the-dataset)
+- [Roadmap](#roadmap)
 
 # Intro
 - It has more than **5.2K** Python repositories and **4.2M** type annotations.
@@ -93,3 +94,8 @@ publisher = {IEEE Computer Society},
 month = {May}
 }
 ```
+
+# Roadmap
+- Type-checking ground truth in the dataset and releasing a type-checked version.
+- Gathering Python projects that depend on type-checkers other than mypy, i.e., pyre, pytype, and pyright.
+- Apply type annotations from [typeshed](https://github.com/python/typeshed) to the dataset.
