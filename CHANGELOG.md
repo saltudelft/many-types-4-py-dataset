@@ -2,6 +2,10 @@
 All notable changes to the ManyTypes4Py dataset will be documented in this file.
 Each version of the dataset can be downloaded on [zenodo](https://zenodo.org/search?page=1&size=20&q=conceptrecid:4044635&all_versions&sort=-version).
 
+## [0.7] 2021-08-24
+- The dataset now contains *clean* and *complete* versions. The clean version has **type-checked** Python projects by [mypy](https://mypy.readthedocs.io/). The complete version contains all Python projects in the dataset same as v0.6.
+- A list of type-checked Python source files are included in `type_checked_files.txt` (using mypy).
+
 ## [0.6] 2021-04-26
 - Processed projects have now the type of variables inferred by [Pyre](https://pyre-check.org/).
 - Visible type hints are added for the whole dataset. They are extracted recursively from the dataset's projects and their dependencies.

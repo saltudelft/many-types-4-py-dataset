@@ -8,7 +8,10 @@
 - [Roadmap](#roadmap)
 
 # Intro
-- It has more than **5.2K** Python repositories and **4.2M** type annotations.
+- It has *clean* and *complete* versions (from v0.7):
+  - The clean version has 5.1K **type-checked** Python repositories and 1.2M type annotations.
+  - The complete version has 5.2K Python repositories and 3.3M type annotations.
+- Its source files are type-checked using mypy (clean version).
 - Its projects were processed in JSON-formatted files using the [LibSA4Py](https://github.com/saltudelft/libsa4py) pipeline.
 - Its source files were already split into training, validation, and test sets for training ML models.
 - It is de-duplicated using [CD4Py](https://github.com/saltudelft/CD4Py).
@@ -96,6 +99,5 @@ month = {May}
 ```
 
 # Roadmap
-- Type-checking ground truth in the dataset and releasing a type-checked version.
 - Gathering Python projects that depend on type-checkers other than mypy, i.e., pyre, pytype, and pyright.
 - Apply type annotations from [typeshed](https://github.com/python/typeshed) to the dataset.
